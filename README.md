@@ -23,4 +23,5 @@ Still have Initial Lamb’s Commentary
   * LSDJ MIDIOUT Mode
 
 * Modes not tested:
+  * LSDJ Live Map Mode
   * Nanoloop Mode
