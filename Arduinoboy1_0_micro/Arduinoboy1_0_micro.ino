@@ -10,9 +10,9 @@
  ***************************************************************************
  ***************************************************************************
  *                                                                         *
- * Version: 1.2.2                                                          *
- * Date:    Sept 14 2011                                                     *
- * Name:    Timothy Lamb                                                   *
+ * Version: 1.0 for ATMega32U4                                             *
+ * Date:    April 2 2014                                                   *
+ * Original Programmer:    Timothy Lamb                                    *
  * Email:   trash80@gmail.com                                              *
  *                                                                         *
  ***************************************************************************
@@ -24,10 +24,17 @@
  * NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   *
  * NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE   *
  *                                                                         *
- *  As of version 1.1.0 Gameboy Pins have changes from 5,6,7 to Analog in  *
- *  pins 0,1,2 ... This allows direct port access which not interfearing   *
- *  with serial communication. There are no more "delay" settings, and     * 
- *  everything seems much faster / better now.                             *
+ *  This is a variation of the Arduinoboy project created by Timothy Lamb. *
+ *  The original code is made to work with Arduino boards that run with    *
+ *  ATMega168/328 chip.                                                    * 
+ *                                                                         *
+ *  ATMega32U4 has a different port mapping (it has also more pin than     *
+ *  ATMega168/328) and a different method to access to the serial ports.   *
+ *                                                                         *
+ *  Modifications, and a little swapping on the analog pin, made the       *
+ *  Arduino Micro works with the most of the modes of the original aBoy.   *
+ *                                                                         *
+ *  Hope to resolve the issues soon.                                       *
  *                                                                         *
  *  http://code.google.com/p/arduinoboy/                                   *
  *                                                                         *
@@ -35,9 +42,9 @@
  *     - 6 LEDS on pins 8 to 13                                            *
  *     - Push button on pin 3 (for selecting mode)                         *
  *     - MIDI Opto-isolator power on pin 4                                 *
- *     - Gameboy Clock line on analog in pin 0                             *
- *     - Gameboy Serial Data input on analog in pin 1                      *
- *     - Serial Data from gameboy on analog in pin 2                       *
+ *     - Gameboy Clock line on analog in pin 5                             *
+ *     - Gameboy Serial Data input on analog in pin 4                      *
+ *     - Serial Data from gameboy on analog in pin 3                       *
  *                                                                         *
  * Program Information:                                                    *
  *    LSDJ Slave Mode Midi Note Effects:                                   *
