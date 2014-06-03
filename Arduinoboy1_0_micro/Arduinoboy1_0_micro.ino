@@ -13,6 +13,7 @@
  * Version: 1.0 for ATMega32U4                                             *
  * Date:    April 2 2014                                                   *
  * Original Programmer:    Timothy Lamb                                    *
+ * ArduinoBoy Micro Programmer: Daniele Biggiogero                         *
  * Email:   trash80@gmail.com                                              *
  *                                                                         *
  ***************************************************************************
@@ -110,8 +111,6 @@
 
 #define MEM_MIDIOUT_BIT_DELAY 61
 #define MEM_MIDIOUT_BYTE_DELAY 63
-
-
 
 /***************************************************************************
 * User Settings
