@@ -154,9 +154,9 @@ byte memory[MEM_MAX];
 * Lets Assign our Arduino Pins .....
 ***************************************************************************/
 
-int pinGBClock     = A5;    // Analog In 5 - clock out to gameboy
-int pinGBSerialOut = A4;    // Analog In 4 - serial data to gameboy
-int pinGBSerialIn  = A3;    // Analog In 3 - serial data from gameboy
+int pinGBClock     = A5;    // Analog In 0 (PF0) - clock out to gameboy
+int pinGBSerialOut = A4;    // Analog In 1 (PF1) - serial data to gameboy
+int pinGBSerialIn  = A3;    // Analog In 2 (PF4) - serial data from gameboy
 
 int pinMidiInputPower = 4; // power pin for midi input opto-isolator
 
@@ -343,7 +343,8 @@ void setup() {
   Set Pin States
 */
   digitalWrite(pinGBClock,HIGH);    // gameboy wants a HIGH line
-  digitalWrite(pinGBSerialOut,LOW);    // no data to send
+  digitalWrite(pinGBSerialOut,LOW); // no data to send
+  digitalWrite(pinGBSerialIn,LOW);  // no data to receive
 /*
   Misc Startup
 */
