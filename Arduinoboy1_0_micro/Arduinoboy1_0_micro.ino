@@ -37,15 +37,15 @@
  *                                                                         *
  *  Hope to resolve the issues soon.                                       *
  *                                                                         *
- *  http://code.google.com/p/arduinoboy/                                   *
+ *  https://github.com/trash80/Arduinoboy                                  *
  *                                                                         *
  *   Arduino pin settings:  (Layout is final)                              *
  *     - 6 LEDS on pins 8 to 13                                            *
  *     - Push button on pin 3 (for selecting mode)                         *
  *     - MIDI Opto-isolator power on pin 4                                 *
- *     - Gameboy Clock line on analog in pin 5                             *
- *     - Gameboy Serial Data input on analog in pin 4                      *
- *     - Serial Data from gameboy on analog in pin 3                       *
+ *     - Gameboy Clock line on Analog In pin 5                             *
+ *     - Gameboy Serial Data input on Analog In pin 4                      *
+ *     - Serial Data from gameboy on Analog In pin 3                       *
  *                                                                         *
  * Program Information:                                                    *
  *    LSDJ Slave Mode Midi Note Effects:                                   *
@@ -70,7 +70,7 @@
  *      58 - A#2 Table Down                                                *
  *      59 - B-2 Cue Table                                                 *
  *      60 - C-3 to C-8 Notes!                                             *
- *      Prgram Change to select from instrument table                      *
+ *      Program Change to select from instrument table                     *
  *                                                                         *
  ***************************************************************************/
 /***************************************************************************
@@ -119,9 +119,7 @@
 
 boolean alwaysUseDefaultSettings = false; //set to true to always use the settings below, else they are pulled from memory for the software editor
 
-
 boolean usbMode                  = false; //to use usb for serial communication as oppose to MIDI - sets baud rate to 38400
-
 
 byte defaultMemoryMap[MEM_MAX] = {
   0x7F,0x01,0x02,0x7F, //memory init check
@@ -138,7 +136,7 @@ byte defaultMemoryMap[MEM_MAX] = {
   0,1,2,3, //midiOutNoteMessageChannels - midi channels for lsdj midi out note messages Default: channels 1,2,3,4
   0,1,2,3, //midiOutCCMessageChannels - midi channels for lsdj midi out CC messages Default: channels 1,2,3,4
   1,1,1,1, //midiOutCCMode - CC Mode, 0=use 1 midi CC, with the range of 00-6F, 1=uses 7 midi CCs with the
-                       //range of 0-F (the command's first digit would be the CC#), either way the value is scaled to 0-127 on output
+           //range of 0-F (the command's first digit would be the CC#), either way the value is scaled to 0-127 on output
   1,1,1,1, //midiOutCCScaling - CC Scaling- Setting to 1 scales the CC value range to 0-127 as oppose to lsdj's incomming 00-6F (0-112) or 0-F (0-15) 
   1,2,3,7,10,11,12, //pu1: midiOutCCMessageNumbers - CC numbers for lsdj midi out, if CCMode is 1, all 7 ccs are used per channel at the cost of a limited resolution of 0-F
   1,2,3,7,10,11,12, //pu2
@@ -156,9 +154,9 @@ byte memory[MEM_MAX];
 * Lets Assign our Arduino Pins .....
 ***************************************************************************/
 
-int pinGBClock     = A5;    // Analog In 0 - clock out to gameboy
-int pinGBSerialOut = A4;    // Analog In 1 - serial data to gameboy
-int pinGBSerialIn  = A3;    // Analog In 2 - serial data from gameboy
+int pinGBClock     = A5;    // Analog In 5 - clock out to gameboy
+int pinGBSerialOut = A4;    // Analog In 4 - serial data to gameboy
+int pinGBSerialIn  = A3;    // Analog In 3 - serial data from gameboy
 
 int pinMidiInputPower = 4; // power pin for midi input opto-isolator
 
@@ -172,8 +170,6 @@ int pinButtonMode = 3; //toggle button for selecting the mode
 ***************************************************************************/
 
 int eepromMemoryByte = 0; //Location of where to store settings from mem
-
-
 
 /***************************************************************************
 * Sysex Settings & vars
@@ -197,25 +193,24 @@ byte longestSysexMessage = 128;
 int midioutBitDelay = 0;
 int midioutByteDelay = 0;
 
-
 /***************************************************************************
 * Switches and states
 ***************************************************************************/
-boolean sequencerStarted = false;        //Sequencer has Started
+boolean sequencerStarted    = false;        //Sequencer has Started
 boolean midiSyncEffectsTime = false;
-boolean midiNoteOnMode   =false;
-boolean midiNoteOffMode  =false;
-boolean midiProgramChange=false;
-boolean midiAddressMode  =false;
-boolean midiValueMode    =false;
+boolean midiNoteOnMode      = false;
+boolean midiNoteOffMode     = false;
+boolean midiProgramChange   = false;
+boolean midiAddressMode     = false;
+boolean midiValueMode       = false;
 
 int midiOutLastNote[4] = {-1,-1,-1,-1};
 
-boolean statusLedIsOn    =false;
-boolean statusLedBlink   =false;
+boolean statusLedIsOn       = false;
+boolean statusLedBlink      = false;
 
-boolean nanoState        =false;
-boolean nanoSkipSync     =false;
+boolean nanoState           = false;
+boolean nanoSkipSync        = false;
 
 int buttonDepressed;
 int buttonState;
@@ -237,17 +232,16 @@ int midioutNoteTimerThreshold = 10;
 /***************************************************************************
 * Counter vars
 ***************************************************************************/
-int countLSDJTicks = 0;            //for loop int (we need to cycle 8 pulses)
-int countSyncTime  = 0;
-int countSyncLightTime=0;
-int countSyncSteps = 0;
-int countSyncPulse = 0;
-int countGbClockTicks =0;
-int countClockPause =0;
+int countLSDJTicks     = 0; 	  //for loop int (we need to cycle 8 pulses)
+int countSyncTime      = 0;
+int countSyncLightTime = 0;
+int countSyncSteps     = 0;
+int countSyncPulse     = 0;
+int countGbClockTicks  = 0;
+int countClockPause    = 0;
 int countIncommingMidiByte =0;
-int countStatusLedOn =0;
-unsigned int waitClock =0;
-
+int countStatusLedOn   = 0;
+unsigned int waitClock = 0;
 
 int miscLastLed;
 unsigned long int miscLedTime;
@@ -264,13 +258,13 @@ byte midiData[] = {0, 0, 0};
 byte lastMidiData[] = {0, 0, 0};
 
 int incomingMidiNote = 0;
-int incomingMidiVel = 0;
+int incomingMidiVel  = 0;
 byte readToggleMode;
 byte serialWriteBuffer[256];
 byte midiDefaultStartOffset;
-int  writePosition=0;
-int  readPosition=0;
-int lastMode=0; //Stores the last selected mode for leds.
+int writePosition = 0;
+int readPosition  = 0;
+int lastMode      = 0; //Stores the last selected mode for leds.
 
 byte midiSyncByte;
 byte midiSyncByteLast;
@@ -282,7 +276,7 @@ byte midiStatusChannel;
 * LSDJ Keyboard mode settings
 ***************************************************************************/      
 byte keyboardNotes[] = {0x1A,0x1B,0x22,0x23,0x21,0x2A,0x34,0x32,0x33,0x31,0x3B,0x3A,
-                         0x15,0x1E,0x1D,0x26,0x24,0x2D,0x2E,0x2C,0x36,0x35,0x3D,0x3C};
+                        0x15,0x1E,0x1D,0x26,0x24,0x2D,0x2E,0x2C,0x36,0x35,0x3D,0x3C};
 byte keyboardOctDn = 0x05;
 byte keyboardOctUp = 0x06;
 
@@ -315,10 +309,10 @@ int keyboardLastOct = 0;
 int keyboardLastIns = 0;
 int keyboardLastTbl = 0;
 
-int keyboardDiff = 0;
+int keyboardDiff  = 0;
 int keyboardCount = 0;
 byte keyboardStartOctave = 0x24;
-byte keyboardNoteStart = 0;
+byte keyboardNoteStart  = 0;
 byte keyboardNoteOffset = 0;
 byte keyboardCommands[12];
 

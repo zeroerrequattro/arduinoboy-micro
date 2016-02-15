@@ -24,10 +24,10 @@ void modeLSDJSlaveSyncSetup()
 void modeLSDJSlaveSync()
 {
   while(1){  //Loop forever
-  if (Serial1.available()) {                 //If MIDI Byte Availaibleleleiel
-    incomingMidiByte = Serial1.read();           //Read it
+  if (Serial1.available()) {                    //If MIDI Byte Availaible
+    incomingMidiByte = Serial1.read();          //Read it
     
-    if(!checkForProgrammerSysex(incomingMidiByte) && !usbMode) Serial1.write(incomingMidiByte);       //Send it back to the Midi out
+    if(!checkForProgrammerSysex(incomingMidiByte) && !usbMode) Serial1.write(incomingMidiByte); //Send it back to the Midi out
     
     if(incomingMidiByte & 0x80) {               //If we have received a MIDI Status Byte
     switch (incomingMidiByte) {                    
@@ -35,7 +35,7 @@ void modeLSDJSlaveSync()
         if(sequencerStarted && midiSyncEffectsTime && !countSyncTime   //If the seq has started and our sync effect is on and at zero
           || sequencerStarted && !midiSyncEffectsTime) {               //or seq is started and there is no sync effects
               if(!countSyncPulse && midiDefaultStartOffset) {          //if we received a note for start offset
-                //sendByteToGameboy(midiDefaultStartOffset);              //send the offset
+                //sendByteToGameboy(midiDefaultStartOffset);           //send the offset
               }
               sendClockTickToLSDJ();                                   //send the clock tick 
               updateVisualSync();

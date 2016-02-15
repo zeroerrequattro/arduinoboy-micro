@@ -22,9 +22,9 @@ void modeMidiGbSetup()
 void modeMidiGb()
 {
   boolean sendByte = false;
-  while(1){                                //Loop foreverrrr
-    if (Serial1.available()) {          //If MIDI is sending
-      incomingMidiByte = Serial1.read();    //Get the byte sent from MIDI
+  while(1){                              //Infinite loop
+    if (Serial1.available()) {           //If MIDI is sending
+      incomingMidiByte = Serial1.read(); //Get the byte sent from MIDI
       
       if(!checkForProgrammerSysex(incomingMidiByte) && !usbMode) Serial1.write(incomingMidiByte); //Echo the Byte to MIDI Output
       
@@ -85,10 +85,10 @@ void modeMidiGb()
 
 boolean checkGbSerialStopped()
 {
-  countClockPause++;                                 //Increment the counter
-  if(countClockPause > 16000) {                      //if we've reached our waiting period
-      countClockPause = 0;                           //reset our clock
-      Serial1.write(0xFC);                      //send the transport stop message
+  countClockPause++;              //Increment the counter
+  if(countClockPause > 16000) {   //if we've reached our waiting period
+      countClockPause = 0;        //reset our clock
+      Serial1.write(0xFC);        //send the transport stop message
     return true;
   }
   return false;

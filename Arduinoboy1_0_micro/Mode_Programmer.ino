@@ -103,7 +103,6 @@ boolean checkSysexChecksum()
   return true;
 }
 
-
 void clearSysexBuffer()
 {
   for(int x=0;x!=sysexPosition;x++) {
@@ -181,8 +180,6 @@ void getSysexData()
   clearSysexBuffer();
 }
 
-
-
 boolean checkForProgrammerSysex(byte sin)
 {
     if(sin == 0xF0) {
@@ -205,7 +202,6 @@ boolean checkForProgrammerSysex(byte sin)
     }
     return false;
 }
-
 
 void blinkSelectedLight(int led)
 {
