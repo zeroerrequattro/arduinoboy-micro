@@ -10,25 +10,26 @@ This is a modified version of the code made by Timothy and it's under GPLv2 Lice
 
 You can find the original source code of Arduinoboy for ATMega168/328 here: https://github.com/trash80/Arduinoboy
 
-##Version 1.1
+###Version 1.1
 
 Fixed code in MidiOut Mode. Now it should works (Thanks to Mario Schallner and Riccardo Binetti).<br>
 Still have Lamb's commentary. It's too funny to delete.
 
-##Version 1.0
+###Version 1.0
 
 First Release of the code.<br>
 Still have Initial Lamb’s commentary
 
-* Modes tested and working:
-  * LSDJ Slave Mode
-  * LSDJ Master Mode
-  * LSDJ Keyboard Mode
-  * mGB Mode
+_ _ _
 
-* Modes tested and not working:
-  * LSDJ MIDIOUT Mode
+### Modes:
 
-* Modes not tested:
-  * LSDJ Live Map Mode
-  * Nanoloop Mode
+The modes checked have been tested.
+
+ - [x] LSDJ Slave Mode
+ - [x] LSDJ Master Mode
+ - [x] LSDJ Keyboard Mode
+ - [x] mGB Mode
+ - [x] LSDJ MIDIOUT Mode _(should work on v1.1)_
+ - [ ] LSDJ Live Map Mode
+ - [ ] Nanoloop Mode
