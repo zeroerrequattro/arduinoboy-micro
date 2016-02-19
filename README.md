@@ -1,21 +1,24 @@
-#Arduinoboy Micro#
+#Arduinoboy Micro
 
-This project is meant to make a functional Arduinoboy with the boards that has the ATMega32U4 chip mounted on it (Eg: Arduino Leonardo, Arduino Micro, Sparkfun Arduino Pro Micro).
+This project is meant to make a functional Arduinoboy with boards that mounts ATMega32U4 chips (Eg: Arduino Leonardo, Arduino Micro, Sparkfun Arduino Pro Micro).
 
-As stated by myself and by various users around the web, the code made by Timothy works only on Arduino devices that has the ATMega168/328 chip.
+As stated by myself and by various users around the web, the code made by Timothy Lamb (aka Trash80) works only on Arduino devices that has the ATMega168/328 chip (Eg: Arduino Uno, Arduino Mini etc.).
 
-My intention is to make a full working code that that can be uploaded on ATMega32U4 devices.
+This project is intended to work with LSDJ, Nanoloop and mGB.
 
-This project will work with LSDJ, Nanoloop and mGB.
+This is a modified version of the code made by Timothy and it's under GPLv2 License.
 
-This is a modified version of the code made by Timothy Lamb aka Trash80 and is under the GNU General Public License.
+You can find the original source code of Arduinoboy for ATMega168/328 here: https://github.com/trash80/Arduinoboy
 
-You can find the original code source of Arduinoboy for ATMega168/328 here: https://code.google.com/p/arduinoboy
+##Version 1.1
 
-##Version 1.0##
+Fixed code in MidiOut Mode. Now it should works (Thanks to Mario Schallner and Riccardo Binetti).<br>
+Still have Lamb's commentary. It's too funny to delete.
 
-First Release of the code.
-Still have Initial Lamb’s Commentary
+##Version 1.0
+
+First Release of the code.<br>
+Still have Initial Lamb’s commentary
 
 * Modes tested and working:
   * LSDJ Slave Mode

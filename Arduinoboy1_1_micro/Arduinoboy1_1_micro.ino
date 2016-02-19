@@ -1,20 +1,21 @@
 /***************************************************************************
  ***************************************************************************
  *                         __      _             __                        *
- *         ____ __________/ /_  __(_)___  ____  / /_  ____  __  __         *
+ *         ____  _________/ /_  __(_)___  ____  / /_  ____  __  __         *
  *        / __ `/ ___/ __  / / / / / __ \/ __ \/ __ \/ __ \/ / / /         *
  *       / /_/ / /  / /_/ / /_/ / / / / / /_/ / /_/ / /_/ / /_/ /          *
  *       \__,_/_/   \__,_/\__,_/_/_/ /_/\____/_.___/\____/\__, /           *
- *                                                       /____/            *
+ *                                             (_)       /____/            *
+ *                                      /  ` \/ / __/ __/ _ \              *
+ *                                     /_/_/_/_/\__/_/  \___/              *
  *                                                                         *
  ***************************************************************************
  ***************************************************************************
  *                                                                         *
- * Version: 1.0 for ATMega32U4                                             *
+ * Version: 1.1 for ATMega32U4                                             *
  * Date:    April 2 2014                                                   *
  * Original Programmer:    Timothy Lamb                                    *
- * ArduinoBoy Micro Programmer: Daniele Biggiogero                         *
- * Email:   trash80@gmail.com                                              *
+ * aBoy Micro Programmer:  Daniele Biggiogero                              *
  *                                                                         *
  ***************************************************************************
  ***************************************************************************
@@ -35,8 +36,9 @@
  *  Modifications, and a little swapping on the analog pin, made the       *
  *  Arduino Micro works with the most of the modes of the original aBoy.   *
  *                                                                         *
- *  Hope to resolve the issues soon.                                       *
+ *  Hope to resolve the various issues soon.                               *
  *                                                                         *
+ *  Original code:                                                         *
  *  https://github.com/trash80/Arduinoboy                                  *
  *                                                                         *
  *   Arduino pin settings:  (Layout is final)                              *
@@ -86,7 +88,8 @@
 #define MEM_MAX 65
 #define NUMBER_OF_MODES 7    //Right now there are 7 modes, Might be more in the future
 
-//!!! do not edit these, they are the position in EEPROM memory that contain the value of each stored setting
+// !!! do not edit these, they are the position in EEPROM memory 
+// that contain the value of each stored setting
 #define MEM_CHECK 0
 #define MEM_VERSION_FIRST 1
 #define MEM_VERSION_SECOND 2
@@ -117,75 +120,77 @@
 * User Settings
 ***************************************************************************/
 
-boolean alwaysUseDefaultSettings = false; //set to true to always use the settings below, else they are pulled from memory for the software editor
+//set to true to always use the settings below, else they are pulled from memory for the software editor
+boolean alwaysUseDefaultSettings = false;
 
-boolean usbMode                  = false; //to use usb for serial communication as oppose to MIDI - sets baud rate to 38400
+//to use usb for serial communication as oppose to MIDI - sets baud rate to 38400
+boolean usbMode = false;
 
 byte defaultMemoryMap[MEM_MAX] = {
-  0x7F,0x01,0x02,0x7F, //memory init check
-  0x00, //force mode (forces lsdj to be sl)
-  0x00, //mode
+  0x7F,0x01,0x02,0x7F, // memory init check
+  0x00, // force mode (forces lsdj to be sl)
+  0x00, // mode
   
-  15, //sync effects midi channel (0-15 = 1-16)
-  15, //masterNotePositionMidiChannel - LSDJ in master mode will send its song position on the start button via midi note. (0-15 = 1-16)
+  15, // sync effects midi channel (0-15 = 1-16)
+  15, // masterNotePositionMidiChannel - LSDJ in master mode will send its song position on the start button via midi note. (0-15 = 1-16)
   
-  15, //keyboardInstrumentMidiChannel - midi channel for keyboard instruments in lsdj. (0-15 = 1-16)
-  1, //Keyboard Compatability Mode
-  1, //Set to true if you want to have midi channel set the instrument number / doesnt do anything anymore
+  15, // keyboardInstrumentMidiChannel - midi channel for keyboard instruments in lsdj. (0-15 = 1-16)
+  1,  // Keyboard Compatability Mode
+  1,  // Set to true if you want to have midi channel set the instrument number / doesnt do anything anymore
   
-  0,1,2,3, //midiOutNoteMessageChannels - midi channels for lsdj midi out note messages Default: channels 1,2,3,4
-  0,1,2,3, //midiOutCCMessageChannels - midi channels for lsdj midi out CC messages Default: channels 1,2,3,4
-  1,1,1,1, //midiOutCCMode - CC Mode, 0=use 1 midi CC, with the range of 00-6F, 1=uses 7 midi CCs with the
-           //range of 0-F (the command's first digit would be the CC#), either way the value is scaled to 0-127 on output
-  1,1,1,1, //midiOutCCScaling - CC Scaling- Setting to 1 scales the CC value range to 0-127 as oppose to lsdj's incomming 00-6F (0-112) or 0-F (0-15) 
-  1,2,3,7,10,11,12, //pu1: midiOutCCMessageNumbers - CC numbers for lsdj midi out, if CCMode is 1, all 7 ccs are used per channel at the cost of a limited resolution of 0-F
-  1,2,3,7,10,11,12, //pu2
-  1,2,3,7,10,11,12, //wav
-  1,2,3,7,10,11,12, //noi
+  0,1,2,3, // midiOutNoteMessageChannels - midi channels for lsdj midi out note messages Default: channels 1,2,3,4
+  0,1,2,3, // midiOutCCMessageChannels - midi channels for lsdj midi out CC messages Default: channels 1,2,3,4
+  1,1,1,1, // midiOutCCMode - CC Mode, 0=use 1 midi CC, with the range of 00-6F, 1=uses 7 midi CCs with the
+           // range of 0-F (the command's first digit would be the CC#), either way the value is scaled to 0-127 on output
+  1,1,1,1, // midiOutCCScaling - CC Scaling- Setting to 1 scales the CC value range to 0-127 as oppose to lsdj's incomming 00-6F (0-112) or 0-F (0-15) 
+  1,2,3,7,10,11,12, // pu1: midiOutCCMessageNumbers - CC numbers for lsdj midi out, if CCMode is 1, all 7 ccs are used per channel at the cost of a limited resolution of 0-F
+  1,2,3,7,10,11,12, // pu2
+  1,2,3,7,10,11,12, // wav
+  1,2,3,7,10,11,12, // noi
   
-  0, 1, 2, 3, 4, //mGB midi channels (0-15 = 1-16)
-  15, //livemap / sync map midi channel (0-15 = 1-16)
-  80,1,  //midiout bit check delay & bit check delay multiplier 
-  0,0//midiout byte received delay & byte received delay multiplier 
+  0, 1, 2, 3, 4, // mGB midi channels (0-15 = 1-16)
+  15,   //livemap / sync map midi channel (0-15 = 1-16)
+  80,1, //midiout bit check delay & bit check delay multiplier 
+  0,0   //midiout byte received delay & byte received delay multiplier 
 };
 byte memory[MEM_MAX];
 
 /***************************************************************************
-* Lets Assign our Arduino Pins .....
+* Lets Assign our Arduino Pins ...
 ***************************************************************************/
 
-int pinGBClock     = A5;    // Analog In 0 (PF0) - clock out to gameboy
-int pinGBSerialOut = A4;    // Analog In 1 (PF1) - serial data to gameboy
-int pinGBSerialIn  = A3;    // Analog In 2 (PF4) - serial data from gameboy
+int pinGBClock     = A5;   // Analog In 0 (PF0) - clock out to gameboy
+int pinGBSerialOut = A4;   // Analog In 1 (PF1) - serial data to gameboy
+int pinGBSerialIn  = A3;   // Analog In 2 (PF4) - serial data from gameboy
 
 int pinMidiInputPower = 4; // power pin for midi input opto-isolator
 
-int pinStatusLed = 13; // Status LED
+int pinStatusLed = 13;     // Status LED
 int pinLeds[] = {12,11,10,9,8,13}; // LED Pins
 
-int pinButtonMode = 3; //toggle button for selecting the mode
+int pinButtonMode = 3;     // Toggle button for selecting the mode
 
 /***************************************************************************
-* Memory
-***************************************************************************/
+ * Memory
+ ***************************************************************************/
 
-int eepromMemoryByte = 0; //Location of where to store settings from mem
+int eepromMemoryByte = 0;  // Location of where to store settings from mem
 
 /***************************************************************************
-* Sysex Settings & vars
-***************************************************************************/
+ * Sysex Settings & vars
+ ***************************************************************************/
 
 boolean sysexReceiveMode = 0;
 boolean sysexProgrammingMode = 0;
 boolean sysexProgrammingWaiting = 0;
 boolean sysexProgrammingConnected = 0;
 
-unsigned long sysexProgrammerWaitTime = 2000; //2 seconds
-unsigned long sysexProgrammerCallTime = 1000; //1 second
+unsigned long sysexProgrammerWaitTime = 2000; // 2 seconds
+unsigned long sysexProgrammerCallTime = 1000; // 1 second
 unsigned long sysexProgrammerLastResponse = 0;
 unsigned long sysexProgrammerLastSent = 0;
 
-byte sysexManufacturerId = 0x69; //har har harrrrr :)
+byte sysexManufacturerId = 0x69; // har har harrrrr :)
 int sysexPosition;
 byte sysexData[128];
 byte longestSysexMessage = 128;
@@ -194,9 +199,9 @@ int midioutBitDelay = 0;
 int midioutByteDelay = 0;
 
 /***************************************************************************
-* Switches and states
-***************************************************************************/
-boolean sequencerStarted    = false;        //Sequencer has Started
+ * Switches and states
+ ***************************************************************************/
+boolean sequencerStarted    = false;                // Sequencer has Started
 boolean midiSyncEffectsTime = false;
 boolean midiNoteOnMode      = false;
 boolean midiNoteOffMode     = false;
@@ -214,7 +219,7 @@ boolean nanoSkipSync        = false;
 
 int buttonDepressed;
 int buttonState;
-unsigned long int buttonProgrammerWaitTime = 2000; //2 whole seconds
+unsigned long int buttonProgrammerWaitTime = 2000;        // 2 whole seconds
 unsigned long int buttonTime;
 
 
@@ -232,14 +237,14 @@ int midioutNoteTimerThreshold = 10;
 /***************************************************************************
 * Counter vars
 ***************************************************************************/
-int countLSDJTicks     = 0; 	  //for loop int (we need to cycle 8 pulses)
+int countLSDJTicks     = 0; 	 // for loop int (we need to cycle 8 pulses)
 int countSyncTime      = 0;
 int countSyncLightTime = 0;
 int countSyncSteps     = 0;
 int countSyncPulse     = 0;
 int countGbClockTicks  = 0;
 int countClockPause    = 0;
-int countIncommingMidiByte =0;
+int countIncommingMidiByte = 0;
 int countStatusLedOn   = 0;
 unsigned int waitClock = 0;
 
@@ -317,21 +322,16 @@ byte keyboardNoteOffset = 0;
 byte keyboardCommands[12];
 
 void setup() {
-/*
-  Init Memory
-*/
+  // Init Memory
   initMemory(0);
-/*
-  Init Pins
-*/
+  
+  // Init Pins
   for(int led=0;led<=5;led++) pinMode(pinLeds[led],OUTPUT);
   pinMode(pinStatusLed,OUTPUT);
   pinMode(pinButtonMode,INPUT); 
   DDRF = B00111111; //Set analog in pins as outputs
   
-/*
-  Set MIDI Serial Rate
-*/
+  // Set MIDI Serial Rate
   if(usbMode == true) {
     Serial1.begin(38400); //31250
   } else {
@@ -339,34 +339,30 @@ void setup() {
     digitalWrite(pinMidiInputPower,HIGH); // turn on the optoisolator
     Serial1.begin(31250); //31250
   }
-/*
-  Set Pin States
-*/
+  
+  // Set Pin States
   digitalWrite(pinGBClock,HIGH);    // gameboy wants a HIGH line
   digitalWrite(pinGBSerialOut,LOW); // no data to send
   digitalWrite(pinGBSerialIn,LOW);  // no data to receive
-/*
-  Misc Startup
-*/
+  
+  // Misc Startup
   keyboardNoteStart = keyboardStartOctave + 12; // Set the octave where the actual notes start (the octave below is for the mutes, cursor, etc)
-/*
-  Assign the keyboard mode command array for the first octave
-*/
-  keyboardCommands[0] = keyboardMut1;
-  keyboardCommands[1] = keyboardMut2;
-  keyboardCommands[2] = keyboardMut3;
-  keyboardCommands[3] = keyboardMut4;
-  keyboardCommands[4] = keyboardCurL;
-  keyboardCommands[5] = keyboardCurR;
-  keyboardCommands[6] = keyboardCurU;
-  keyboardCommands[7] = keyboardCurD;
-  keyboardCommands[8] = keyboardEntr;
-  keyboardCommands[9] = keyboardTblDn;
+
+  // Assign the keyboard mode command array for the first octave
+  keyboardCommands[0]  = keyboardMut1;
+  keyboardCommands[1]  = keyboardMut2;
+  keyboardCommands[2]  = keyboardMut3;
+  keyboardCommands[3]  = keyboardMut4;
+  keyboardCommands[4]  = keyboardCurL;
+  keyboardCommands[5]  = keyboardCurR;
+  keyboardCommands[6]  = keyboardCurU;
+  keyboardCommands[7]  = keyboardCurD;
+  keyboardCommands[8]  = keyboardEntr;
+  keyboardCommands[9]  = keyboardTblDn;
   keyboardCommands[10] = keyboardTblUp;
   keyboardCommands[11] = keyboardTblCue;
-/*
-  Load Settings from EEPROM
-*/
+
+  // Load Settings from EEPROM
   if(!memory[MEM_FORCE_MODE]) memory[MEM_MODE] = EEPROM.read(MEM_MODE);
   lastMode = memory[MEM_MODE];
   
@@ -375,9 +371,7 @@ void setup() {
   showSelectedMode(); //Light up the LED that shows which mode we are in.
 }
 
-/*
-  Main Loop, which we don't use to be able to isolate each mode into its own setup and loop functions
-*/
+// Main Loop, which we don't use to be able to isolate each mode into its own setup and loop functions
 void loop () {
   setMode();
   switchMode();

@@ -52,10 +52,10 @@ void modeLSDJMidiout()
         }
       
       } else {
-        setMode();                // Check if mode button was depressed
+        setMode();                 // Check if mode button was depressed
         updateBlinkLights();
         
-        if (Serial1.available()) {                  //If serial data was send to midi inp
+        if (Serial1.available()) { // If serial data was send to midi input
           checkForProgrammerSysex(Serial1.read());
         }
       }
@@ -159,14 +159,14 @@ void stopAllNotes()
     midiData[0] = (0xB0 + (memory[MEM_MIDIOUT_NOTE_CH+m]));
     midiData[1] = 123;
     midiData[2] = 0x7F;
-    Serial1.write(midiData,3); //Send midi
+    Serial1.write(midiData,3); // Send midi
   }
 }
 
 boolean getIncommingSlaveByte()
 {
   delayMicroseconds(midioutBitDelay);
-  PORTF = B00000000; //rightmost bit is clock line, 2nd bit is data to gb, 3rd is your mom
+  PORTF = B00000000; // rightmost bit is clock line, 2nd bit is data to gb, 3rd is your mom
   delayMicroseconds(midioutBitDelay);
   PORTF = B00000001;
   delayMicroseconds(2);
@@ -176,7 +176,7 @@ boolean getIncommingSlaveByte()
       PORTF = B00000000;
       delayMicroseconds(2);
       PORTF = B00000001;
-      incomingMidiByte = (incomingMidiByte << 1) + ((PINF & B00000100)>>2);
+      incomingMidiByte = (incomingMidiByte << 1) + ((PINF & B00010000)>>4);
     }
     return true;
   }

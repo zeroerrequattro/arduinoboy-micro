@@ -19,7 +19,7 @@ int midiTickWait = 4000; //1 ms
 void modeLSDJMapSetup()
 {
   digitalWrite(pinStatusLed,LOW);
-  DDRF  = B00111111; //Set analog in pins as outputs
+  DDRF  = B11110011; //Set analog in pins as outputs
   PORTF = B00000001;
   midiSyncByte = 0xFF;
   blinkMaxCount=1000;
